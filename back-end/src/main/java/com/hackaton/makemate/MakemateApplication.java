@@ -8,10 +8,5 @@ public class MakemateApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(MakemateApplication.class, args);
-
-    System
-            .out.
-            println("ASDFDSF"
-            );
   }
 }
