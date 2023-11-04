@@ -2,8 +2,9 @@
 </script>
 
 <template>
-  <RouterView />
+Tinder page
 </template>
 
 <style scoped>
+
 </style>
