@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
             .filter(
                 user ->
                     !Objects.equals(sender.getId(), user.getId())
-                        && !sender.getMatches().contains(targets))
+                        && !sender.getMatches().contains(user))
             .toList();
 
     Map<User, Double> userToScore = new HashMap<>();
