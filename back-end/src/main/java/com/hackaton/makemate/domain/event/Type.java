@@ -1,6 +1,6 @@
 package com.hackaton.makemate.domain.event;
 
-public enum EventType {
+public enum Type {
   PUBLIC,
   PRIVATE,
 }

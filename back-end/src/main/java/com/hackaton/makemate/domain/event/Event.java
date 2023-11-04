@@ -14,16 +14,16 @@ public class Event {
   @GeneratedValue
   private Long id;
 
-  public EventType getEventType() {
+  public Type getEventType() {
     return eventType;
   }
 
-  public void setEventType(EventType eventType) {
+  public void setEventType(Type eventType) {
     this.eventType = eventType;
   }
 
   @Enumerated(EnumType.STRING)
-  private EventType eventType;
+  private Type eventType;
 
   private String name;
   private String description;
@@ -46,7 +46,7 @@ public class Event {
     Random random = new Random();
 
     int randomIndex = random.nextInt(2);
-    this.eventType = randomIndex == 0 ? EventType.PUBLIC : EventType.PRIVATE;
+    this.eventType = randomIndex == 0 ? Type.PUBLIC : Type.PRIVATE;
   }
 
   public Event() {}
