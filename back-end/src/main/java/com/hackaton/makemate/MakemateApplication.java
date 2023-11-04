@@ -1,8 +1,10 @@
 package com.hackaton.makemate;
 
 import com.github.javafaker.Faker;
+import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.database.user.UserRepository;
+import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,7 @@ public class MakemateApplication {
   @Autowired private UserRepository userRepository;
 
   @Autowired private InterestRepository interestRepository;
+  @Autowired private EventRepository eventRepository;
 
   public static void main(String[] args) {
     SpringApplication.run(MakemateApplication.class, args);
@@ -33,7 +36,29 @@ public class MakemateApplication {
       // TODO: create real migration with flyway if possible
       performInterestMigration();
       performUserMigration();
+      userRepository.flush();
+      performEventMigration();
     };
+  }
+
+  @Transactional
+  public void performEventMigration() {
+    Faker faker = new Faker();
+
+    List<Event> interests = eventRepository.findAll();
+    Collections.shuffle(interests);
+
+    for (int i = 0; i < 20; i++) {
+      Event event =
+          new Event(
+              null,
+              faker.name().firstName(),
+              faker.name().lastName(),
+              faker.date().birthday(),
+              false);
+
+      eventRepository.save(event);
+    }
   }
 
   @Transactional
