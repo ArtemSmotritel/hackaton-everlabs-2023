@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
     if (!Objects.equals(userId, request.userId()))
       throw new BadRequestException("You can't match another users :0");
 
+    if(Objects.equals(request.userId(), request.matchId()))
+      throw new BadRequestException("You can't match with yourself");
+
     User user = fetchUserById(request.userId());
     User match = fetchUserById(request.matchId());
 

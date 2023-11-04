@@ -3,9 +3,8 @@ package com.hackaton.makemate.domain.user;
 import com.google.common.base.Objects;
 import com.hackaton.makemate.domain.interest.Interest;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +33,7 @@ public class User {
       name = "users_matches",
       joinColumns = @JoinColumn(name = "user_id"),
       foreignKey = @ForeignKey(name = "user_interest_fk"))
-  private List<User> matches = new ArrayList<>();
+  private Set<User> matches = new HashSet<>();
 
   private String description;
   private Date birthDate;
@@ -73,11 +72,11 @@ public class User {
     this.firstName = firstName;
   }
 
-  public List<User> getMatches() {
+  public Set<User> getMatches() {
     return matches;
   }
 
-  public void setMatches(List<User> matches) {
+  public void setMatches(Set<User> matches) {
     this.matches = matches;
   }
 
@@ -150,17 +149,11 @@ public class User {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return Objects.equal(id, user.id)
-        && Objects.equal(firstName, user.firstName)
-        && Objects.equal(lastName, user.lastName)
-        && Objects.equal(interests, user.interests)
-        && Objects.equal(description, user.description)
-        && Objects.equal(birthDate, user.birthDate)
-        && Objects.equal(avatarUrl, user.avatarUrl);
+    return Objects.equal(id, user.id) && Objects.equal(firstName, user.firstName) && Objects.equal(lastName, user.lastName) && Objects.equal(interests, user.interests) && Objects.equal(matches, user.matches) && Objects.equal(description, user.description) && Objects.equal(birthDate, user.birthDate) && Objects.equal(avatarUrl, user.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id, firstName, lastName, interests, description, birthDate, avatarUrl);
+    return Objects.hashCode(id, firstName, lastName, interests, matches, description, birthDate, avatarUrl);
   }
 }

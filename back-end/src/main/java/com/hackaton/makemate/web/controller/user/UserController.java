@@ -24,13 +24,6 @@ public class UserController {
     return userMapper.toDto(userService.matchingUsers(id));
   }
 
-  @PostMapping
-  public UserPreviewDto matchWithUser(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) Long id,
-      @RequestBody UserMatchRequestDto requestDto) {
-    return userMapper.toDto(userService.matchWithUser(id, userMapper.toEntity(requestDto)));
-  }
-
   @GetMapping("/{id}")
   public UserPreviewDto getUserById(@PathVariable("id") Long id) {
     return userMapper.toDto(userService.getUserById(id));
