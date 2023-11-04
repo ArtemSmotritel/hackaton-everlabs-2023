@@ -1,11 +1,9 @@
 package com.hackaton.makemate.web.controller.user;
 
 public class HeaderIdExtractor {
-    private HeaderIdExtractor() {
+  private HeaderIdExtractor() {}
 
-    }
-
-    public static Long extractId() {
-        return 0L;
-    }
+  public static Long extractId() {
+    return 0L;
+  }
 }
