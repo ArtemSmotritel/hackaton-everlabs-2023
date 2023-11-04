@@ -108,6 +108,23 @@ public class User {
     return birthDate;
   }
 
+  public int getAge() {
+    if (getBirthDate() == null) return -1;
+
+    Calendar today = Calendar.getInstance();
+
+    Calendar birthDate = Calendar.getInstance();
+    birthDate.setTime(getBirthDate());
+
+    int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+
+    if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
+      age--;
+    }
+
+    return age;
+  }
+
   public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }

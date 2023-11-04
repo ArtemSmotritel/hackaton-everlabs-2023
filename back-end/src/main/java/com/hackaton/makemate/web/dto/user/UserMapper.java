@@ -23,7 +23,7 @@ public class UserMapper {
         entity.getId(),
         entity.getFirstName(),
         entity.getLastName(),
-        birthDateToAge(entity.getBirthDate()),
+        entity.getAge(),
         interestMapper.toDto(entity.getInterests()),
         entity.getAvatarUrl());
   }
