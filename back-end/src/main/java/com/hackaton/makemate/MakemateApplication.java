@@ -1,6 +1,7 @@
 package com.hackaton.makemate;
 
 import com.github.javafaker.Faker;
+import com.google.common.collect.Lists;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.database.user.UserRepository;
@@ -101,7 +102,11 @@ public class MakemateApplication {
   }
 
   private List<Interest> randomSubArray(List<Interest> interests) {
-    int size = new Random().nextInt(0, interests.size());
+    if (interests.isEmpty()) {
+      return Lists.newArrayList();
+    }
+
+    int size = new Random().nextInt(1, interests.size());
     return new ArrayList<>(interests.subList(0, size));
   }
 }

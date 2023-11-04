@@ -4,10 +4,10 @@ import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.event.EventType;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RequestMapping("/api/events")
 @RestController
 public class EventsController {

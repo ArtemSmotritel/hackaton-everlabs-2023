@@ -1,4 +1,3 @@
 package com.hackaton.makemate.domain.event;
 
-public interface EventService {
-}
+public interface EventService {}
