@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: spring-postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  my-app:
+    container_name: my-app
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+networks:
+  default:
+    driver: bridge
