@@ -1,9 +1,9 @@
 package com.hackaton.makemate.domain.user;
 
 import com.google.common.base.Objects;
+import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.interest.Interest;
 import jakarta.persistence.*;
-
 import java.util.*;
 
 @Entity
@@ -38,6 +38,9 @@ public class User {
   private String description;
   private Date birthDate;
   private String avatarUrl;
+
+  @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Event> createdEvents = new ArrayList<>();
 
   public User() {}
 
@@ -149,11 +152,17 @@ public class User {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return Objects.equal(id, user.id) && Objects.equal(firstName, user.firstName) && Objects.equal(lastName, user.lastName) && Objects.equal(interests, user.interests) && Objects.equal(matches, user.matches) && Objects.equal(description, user.description) && Objects.equal(birthDate, user.birthDate) && Objects.equal(avatarUrl, user.avatarUrl);
+    return Objects.equal(id, user.id)
+        && Objects.equal(firstName, user.firstName)
+        && Objects.equal(lastName, user.lastName)
+        && Objects.equal(interests, user.interests)
+        && Objects.equal(description, user.description)
+        && Objects.equal(birthDate, user.birthDate)
+        && Objects.equal(avatarUrl, user.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id, firstName, lastName, interests, matches, description, birthDate, avatarUrl);
+    return Objects.hashCode(id, firstName, lastName, interests, description, birthDate, avatarUrl);
   }
 }

@@ -3,7 +3,6 @@ package com.hackaton.makemate.web.controller.user;
 import com.google.common.net.HttpHeaders;
 import com.hackaton.makemate.domain.user.UserService;
 import com.hackaton.makemate.web.dto.user.UserMapper;
-import com.hackaton.makemate.web.dto.user.UserMatchRequestDto;
 import com.hackaton.makemate.web.dto.user.UserPreviewDto;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;

@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/matches")
 @RestController
 public class MatchController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+  private final UserService userService;
+  private final UserMapper userMapper;
 
-    public MatchController(UserService userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-    }
+  public MatchController(UserService userService, UserMapper userMapper) {
+    this.userService = userService;
+    this.userMapper = userMapper;
+  }
 
-    @PostMapping()
-    public UserPreviewDto matchWithUser(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) Long id,
-            @RequestBody UserMatchRequestDto requestDto) {
-        return userMapper.toDto(userService.matchWithUser(id, userMapper.toEntity(requestDto)));
-    }
+  @PostMapping()
+  public UserPreviewDto matchWithUser(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long id,
+      @RequestBody UserMatchRequestDto requestDto) {
+    return userMapper.toDto(userService.matchWithUser(id, userMapper.toEntity(requestDto)));
+  }
 }
