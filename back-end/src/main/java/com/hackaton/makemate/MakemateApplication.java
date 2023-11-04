@@ -1,11 +1,10 @@
 package com.hackaton.makemate;
 
 import com.github.javafaker.Faker;
-import com.google.common.collect.Lists;
 import com.hackaton.makemate.domain.interest.Interest;
-import com.hackaton.makemate.domain.interest.InterestRepository;
+import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.domain.user.User;
-import com.hackaton.makemate.domain.user.UserRepository;
+import com.hackaton.makemate.database.user.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class MakemateApplication {
   @Bean
   public CommandLineRunner commandLineRunner() {
     return (__) -> {
-      // TODO: create real migration with flyway
+      // TODO: create real migration with flyway if possible
       performInterestMigration();
       performUserMigration();
     };
