@@ -3,7 +3,8 @@ package com.hackaton.makemate.domain.user;
 import com.google.common.base.Objects;
 import com.hackaton.makemate.domain.interest.Interest;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,32 +22,29 @@ public class User {
   @Column(name = "lastname", nullable = false, length = 64)
   private String lastName;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Interest> interests;
+  @ManyToMany()
+//  @CollectionTable(
+//      name = "users_interest",
+//      joinColumns = @JoinColumn(name = "user_id"),
+//      foreignKey = @ForeignKey(name = "user_interest_fk"))
+  private List<Interest> interests = new ArrayList<>();
 
   private String description;
-  private LocalDateTime birthDate;
+  private Date birthDate;
 
   private String avatarUrl;
 
   public User() {}
 
-  public User(
-      Long id,
-      String firstName,
-      String lastName,
-      List<Interest> interests,
-      LocalDateTime birthDate,
-      String avatarUrl) {
+  public User(Long id, String firstName, String lastName, Date birthDate, String avatarUrl) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.interests = interests;
     this.birthDate = birthDate;
     this.avatarUrl = avatarUrl;
   }
 
-  public Long id() {
+  public Long getId() {
     return id;
   }
 
@@ -54,7 +52,7 @@ public class User {
     this.id = id;
   }
 
-  public String firstName() {
+  public String getFirstName() {
     return firstName;
   }
 
@@ -62,7 +60,7 @@ public class User {
     this.firstName = firstName;
   }
 
-  public String lastName() {
+  public String getLastName() {
     return lastName;
   }
 
@@ -70,7 +68,7 @@ public class User {
     this.lastName = lastName;
   }
 
-  public List<Interest> interests() {
+  public List<Interest> getInterests() {
     return interests;
   }
 
@@ -78,7 +76,7 @@ public class User {
     this.interests = interests;
   }
 
-  public String description() {
+  public String getDescription() {
     return description;
   }
 
@@ -86,23 +84,21 @@ public class User {
     this.description = description;
   }
 
-  public LocalDateTime birthDate() {
+  public Date getBirthDate() {
     return birthDate;
   }
 
-  public void setBirthDate(LocalDateTime birthDate) {
+  public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
-  public String avatarUrl() {
+  public String getAvatarUrl() {
     return avatarUrl;
   }
 
   public void setAvatarUrl(String avatarUrl) {
     this.avatarUrl = avatarUrl;
   }
-
-
 
   @Override
   public String toString() {
