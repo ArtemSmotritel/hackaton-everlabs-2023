@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = userRepository.findAll();
 
+        //TODO: write actual algorithm
         return matchAlgorithm(user, users);
     }
 
