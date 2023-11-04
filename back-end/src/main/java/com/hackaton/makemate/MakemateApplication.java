@@ -1,6 +1,7 @@
 package com.hackaton.makemate;
 
 import com.github.javafaker.Faker;
+import com.google.common.collect.Lists;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.database.user.UserRepository;
@@ -64,11 +65,11 @@ public class MakemateApplication {
   @Transactional
   public void performUserMigration() {
     Faker faker = new Faker();
+    final int userCount = 80;
 
     List<Interest> interests = interestRepository.findAll();
-    Collections.shuffle(interests);
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 80; i++) {
       final String description =
           String.format(
               "In the age-old lands of Middle-earth, %s is found wandering the paths of %s. "
@@ -86,11 +87,16 @@ public class MakemateApplication {
       user.setInterests(randomSubArray(interests));
 
       userRepository.save(user);
+      // Don't ask what is it IDK FO
+      if (((userCount | 31) & i) == 0 && (i & (i - 1)) == 0) {
+        Collections.shuffle(interests);
+      }
     }
   }
 
   @Transactional
   public void performInterestMigration() {
+    // Yes I ENJOY SHIT CODING
     interestRepository.save(new Interest(null, "Sport"));
     interestRepository.save(new Interest(null, "Music"));
     interestRepository.save(new Interest(null, "Movie"));
@@ -98,10 +104,40 @@ public class MakemateApplication {
     interestRepository.save(new Interest(null, "Cooking"));
     interestRepository.save(new Interest(null, "Reading"));
     interestRepository.save(new Interest(null, "Swimming"));
+    interestRepository.save(new Interest(null, "Gaming"));
+    interestRepository.save(new Interest(null, "Traveling"));
+    interestRepository.save(new Interest(null, "Hiking"));
+    interestRepository.save(new Interest(null, "Photography"));
+    interestRepository.save(new Interest(null, "Painting"));
+    interestRepository.save(new Interest(null, "Writing"));
+    interestRepository.save(new Interest(null, "Gardening"));
+    interestRepository.save(new Interest(null, "Knitting"));
+    interestRepository.save(new Interest(null, "Cycling"));
+    interestRepository.save(new Interest(null, "Yoga"));
+    interestRepository.save(new Interest(null, "Meditation"));
+    interestRepository.save(new Interest(null, "Fishing"));
+    interestRepository.save(new Interest(null, "DIY"));
+    interestRepository.save(new Interest(null, "Surfing"));
+    interestRepository.save(new Interest(null, "Skateboarding"));
+    interestRepository.save(new Interest(null, "Blogging"));
+    interestRepository.save(new Interest(null, "Volunteering"));
+    interestRepository.save(new Interest(null, "Coding"));
+    interestRepository.save(new Interest(null, "Board Games"));
+    interestRepository.save(new Interest(null, "Astronomy"));
+    interestRepository.save(new Interest(null, "Magic and Illusion"));
+    interestRepository.save(new Interest(null, "Stand-up Comedy"));
+    interestRepository.save(new Interest(null, "Podcasting"));
+    interestRepository.save(new Interest(null, "Language Learning"));
+    interestRepository.save(new Interest(null, "Home Brewing"));
+    interestRepository.save(new Interest(null, "Aquarium Keeping"));
   }
 
   private List<Interest> randomSubArray(List<Interest> interests) {
-    int size = new Random().nextInt(0, interests.size());
+    if (interests.isEmpty()) {
+      return Lists.newArrayList();
+    }
+
+    int size = new Random().nextInt(1, Math.min(8, interests.size()));
     return new ArrayList<>(interests.subList(0, size));
   }
 }

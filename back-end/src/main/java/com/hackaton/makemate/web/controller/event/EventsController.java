@@ -1,12 +1,9 @@
 package com.hackaton.makemate.web.controller.event;
 
-import com.google.common.net.HttpHeaders;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.domain.event.Type;
 import java.util.List;
-
-import com.hackaton.makemate.web.dto.event.eventDto;
-import com.hackaton.makemate.web.dto.event.eventDtoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
