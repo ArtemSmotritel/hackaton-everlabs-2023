@@ -1,4 +1,3 @@
 package com.hackaton.makemate.domain.post;
 
-public class Post {
-}
+public class Post {}
