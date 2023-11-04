@@ -137,7 +137,7 @@ public class MakemateApplication {
       return Lists.newArrayList();
     }
 
-    int size = new Random().nextInt(1, Math.min(8, interests.size()));
+    int size = 1 + new Random().nextInt(Math.min(8, interests.size()));
     return new ArrayList<>(interests.subList(0, size));
   }
 }

@@ -11,11 +11,12 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+
   my-app:
     container_name: my-app
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: deploy/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
     ports:
@@ -25,5 +26,5 @@ services:
       - postgres
 
 networks:
-  postgres:
+  default:
     driver: bridge
