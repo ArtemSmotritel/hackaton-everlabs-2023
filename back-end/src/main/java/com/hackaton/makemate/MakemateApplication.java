@@ -1,10 +1,10 @@
 package com.hackaton.makemate;
 
 import com.github.javafaker.Faker;
-import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.database.interest.InterestRepository;
-import com.hackaton.makemate.domain.user.User;
 import com.hackaton.makemate.database.user.UserRepository;
+import com.hackaton.makemate.domain.interest.Interest;
+import com.hackaton.makemate.domain.user.User;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,12 +44,19 @@ public class MakemateApplication {
     Collections.shuffle(interests);
 
     for (int i = 0; i < 20; i++) {
+      final String description =
+          String.format(
+              "In the age-old lands of Middle-earth, %s is found wandering the paths of %s. "
+                  + "Here, the tales of old come to life and legends walk amongst the living.",
+              faker.lordOfTheRings().character(), faker.lordOfTheRings().location());
+
       User user =
           new User(
               null,
               faker.name().firstName(),
               faker.name().lastName(),
               faker.date().birthday(),
+              description,
               null);
       user.setInterests(randomSubArray(interests));
 

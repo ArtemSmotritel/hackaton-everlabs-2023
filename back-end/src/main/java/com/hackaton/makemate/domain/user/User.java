@@ -23,10 +23,10 @@ public class User {
   private String lastName;
 
   @ManyToMany()
-//  @CollectionTable(
-//      name = "users_interest",
-//      joinColumns = @JoinColumn(name = "user_id"),
-//      foreignKey = @ForeignKey(name = "user_interest_fk"))
+  //  @CollectionTable(
+  //      name = "users_interest",
+  //      joinColumns = @JoinColumn(name = "user_id"),
+  //      foreignKey = @ForeignKey(name = "user_interest_fk"))
   private List<Interest> interests = new ArrayList<>();
 
   private String description;
@@ -36,11 +36,18 @@ public class User {
 
   public User() {}
 
-  public User(Long id, String firstName, String lastName, Date birthDate, String avatarUrl) {
+  public User(
+      Long id,
+      String firstName,
+      String lastName,
+      Date birthDate,
+      String description,
+      String avatarUrl) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.birthDate = birthDate;
+    this.description = description;
     this.avatarUrl = avatarUrl;
   }
 
