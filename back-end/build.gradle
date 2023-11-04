@@ -25,7 +25,8 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 	implementation 'org.postgresql:postgresql:42.3.1'
-
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
