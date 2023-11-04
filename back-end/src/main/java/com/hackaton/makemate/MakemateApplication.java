@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import org.apache.commons.logging.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -134,7 +130,6 @@ public class MakemateApplication {
     interestRepository.save(new Interest(null, "Language Learning"));
     interestRepository.save(new Interest(null, "Home Brewing"));
     interestRepository.save(new Interest(null, "Aquarium Keeping"));
-
   }
 
   private List<Interest> randomSubArray(List<Interest> interests) {
@@ -142,7 +137,7 @@ public class MakemateApplication {
       return Lists.newArrayList();
     }
 
-    int size = new Random().nextInt(1, Math.max(8, interests.size()));
+    int size = new Random().nextInt(1, Math.min(8, interests.size()));
     return new ArrayList<>(interests.subList(0, size));
   }
 }

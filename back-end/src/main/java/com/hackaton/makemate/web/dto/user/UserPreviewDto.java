@@ -11,4 +11,5 @@ public record UserPreviewDto(
     String lastName,
     Integer age,
     List<InterestDto> interests,
-    String avatarUrl) {}
+    String avatarUrl,
+    String description) {}
