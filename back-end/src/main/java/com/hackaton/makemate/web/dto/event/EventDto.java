@@ -13,6 +13,7 @@ public record EventDto(
     List<InterestDto> interests,
     String description,
     String place,
+    UserPreviewDto createdBy,
     List<UserPreviewDto> participants,
     Integer matchCount,
     boolean accepted) {}

@@ -49,6 +49,7 @@ public class EventMapper {
         interestMapper.toDto(entity.event().getInterests()),
         entity.event().getDescription(),
         entity.event().getPlace(),
+        userMapper.toDto(entity.event().getCreatedBy()),
         userMapper.toDto(entity.event().getParticipants()),
         entity.matchesCount(),
         entity.accepted());
@@ -68,7 +69,7 @@ public class EventMapper {
             .reduce(
                 (identity, acc) -> {
                   Set<InterestDto> res = new HashSet<>(identity);
-                  identity.retainAll(acc);
+                  res.retainAll(acc);
                   return new ArrayList<>(res);
                 })
             .orElse(List.of()));

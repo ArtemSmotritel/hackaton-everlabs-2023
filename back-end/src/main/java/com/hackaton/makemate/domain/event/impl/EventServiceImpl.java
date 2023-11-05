@@ -30,7 +30,7 @@ public class EventServiceImpl implements EventService {
     Event event = fetchById(eventId);
 
     if (event.getType() == EvenType.PRIVATE
-        && event.getAllUsers().stream().anyMatch(u -> u.getId().equals(userId))) {
+        && event.getAllUsers().stream().noneMatch(u -> u.getId().equals(userId))) {
       throw new ForbiddenException(
           "You can't fetch information about this event you little fraud ^^");
     }
@@ -104,17 +104,21 @@ public class EventServiceImpl implements EventService {
   }
 
   private EventResponse toResponse(Event event, User user) {
-    int matchCount = -1;
-    Set<User> participants = event.getParticipants();
-    if (participants == null || participants.isEmpty()) matchCount = 0;
+    int matchCount;
+    boolean accepted;
 
-    Set<User> temp = new HashSet<>(participants);
-    temp.retainAll(user.getMatches());
+    Set<User> participants = event.getAllUsers();
 
-    matchCount = matchCount == 0 ? 0 : temp.size();
+    if (participants == null || participants.isEmpty()) {
+      matchCount = 0;
+      accepted = false;
+    } else {
+      Set<User> temp = new HashSet<>(participants);
+      temp.retainAll(user.getMatches());
+      matchCount = temp.size();
 
-    boolean accepted = participants.contains(user) || event.getCreatedBy().equals(user);
-
+      accepted = participants.contains(user) || event.getCreatedBy().equals(user);
+    }
     return new EventResponse(event, matchCount, accepted);
   }
 }
