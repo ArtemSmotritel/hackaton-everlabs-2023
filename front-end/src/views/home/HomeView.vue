@@ -34,7 +34,7 @@ function setSessionUserId() {
             class="home-button tinder-bac-img h-100 w-100 text-h3"
             block
             size="x-large"
-            ><span class="text-on-button">Tinder</span></v-btn
+            ><span class="text-on-button">Make Mate</span></v-btn
           >
         </v-col>
 
@@ -43,7 +43,7 @@ function setSessionUserId() {
             @click="openBoard"
             class="home-button board-bac-img h-100 w-100 text-h3"
             size="x-large"
-            ><span class="text-on-button">Board</span></v-btn
+            ><span class="text-on-button">Events</span></v-btn
           >
         </v-col>
       </div>
@@ -83,7 +83,7 @@ function setSessionUserId() {
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  width: 215px;
+  width: calc(100% + 20px);
   height: 70px;
   z-index: 4;
   background-color: rgba(105, 40, 234, 0.592);

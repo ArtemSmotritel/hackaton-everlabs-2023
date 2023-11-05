@@ -133,7 +133,7 @@ public class EventServiceImpl implements EventService {
               null,
               String.format(
                   "Generated %s for %s and %s",
-                  faker.witcher().location(), pair.getLeft().getId(), pair.getRight().getId()),
+                  faker.witcher().location(), pair.getLeft().getLastName(), pair.getRight().getLastName()),
               faker.witcher().quote(),
               LocalDateTime.now(),
               faker.witcher().location(),
