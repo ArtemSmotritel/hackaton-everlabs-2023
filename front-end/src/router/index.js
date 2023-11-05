@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "../views/home/HomeView.vue";
 import TinderView from "../views/tinder/TinderView.vue";
+import EventBoardView from "../views/event_board/EventBoardView.vue";
 
 const componentRoutes = [
   {
@@ -15,9 +16,9 @@ const componentRoutes = [
     name: "match",
   },
   {
-    path: "/events",
-    component: {},
-    name: "events",
+    path: "/board",
+    component: EventBoardView,
+    name: "event-board",
   },
 ];
 
