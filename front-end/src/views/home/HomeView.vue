@@ -1,29 +1,27 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import {  useRouter } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
-    const inputValue = ref('');
-    const router = useRouter();
-    
-    onMounted(() => {
-      if (localStorage.getItem('userId') !== null) {
-        inputValue.value = localStorage.getItem('userId');
-      }})
+const inputValue = ref("");
+const router = useRouter();
 
-    function openTinder() {
-      router.push('/tinder');
-    }
+onMounted(() => {
+  if (localStorage.getItem("userId") !== null) {
+    inputValue.value = localStorage.getItem("userId");
+  }
+});
 
-    function openBoard() {
-      router.push('/board');
-    }
+function openTinder() {
+  router.push("/mate-match");
+}
 
-    function getInput() {
-      localStorage.setItem('userId', inputValue.value);
+function openBoard() {
+  router.push("/board");
+}
 
-    }
-
-
+function setSessionUserId() {
+  localStorage.setItem("userId", inputValue.value);
+}
 </script>
 
 <template>
@@ -54,10 +52,10 @@ import {  useRouter } from 'vue-router';
         <v-col cols="9">
           <v-text-field v-model="inputValue" label="Enter Id"></v-text-field>
         </v-col>
-        <v-col  cols="3">
+        <v-col cols="3">
           <v-btn
-            @click="getInput"
-            class="save-button  text-body-2"
+            @click="setSessionUserId"
+            class="save-button text-body-2"
             block
             size="x-large"
             >Save</v-btn
@@ -70,15 +68,14 @@ import {  useRouter } from 'vue-router';
 
 <style scoped>
 .home-button {
-  
   background-size: cover;
   box-sizing: border-box;
 }
 .tinder-bac-img {
-  background-image: url('@/assets/tinder.jpg');
+  background-image: url("@/assets/tinder.jpg");
 }
 .board-bac-img {
-  background-image: url('@/assets/board.jpg');
+  background-image: url("@/assets/board.jpg");
 }
 
 .text-on-button {
@@ -89,7 +86,7 @@ import {  useRouter } from 'vue-router';
   width: 215px;
   height: 70px;
   z-index: 4;
-  background-color: rgba(105, 40, 234, 0.592);;
+  background-color: rgba(105, 40, 234, 0.592);
   color: rgb(255, 255, 255);
   font-size: larger;
   font-weight: 900;
@@ -102,10 +99,9 @@ import {  useRouter } from 'vue-router';
   padding: 12px 0;
 }
 .save-button {
-    
-    height: 56px;
-    color: white;
-    font-weight: 700;
-    background-color: rgb(105, 40, 234);
+  height: 56px;
+  color: white;
+  font-weight: 700;
+  background-color: rgb(105, 40, 234);
 }
 </style>
