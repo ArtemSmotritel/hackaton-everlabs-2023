@@ -11,31 +11,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @RestController()
 public class UserController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+  private final UserService userService;
+  private final UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-    }
+  public UserController(UserService userService, UserMapper userMapper) {
+    this.userService = userService;
+    this.userMapper = userMapper;
+  }
 
-    @GetMapping()
-    public List<UserPreviewDto> previewUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) Long id) {
-        return userMapper.toDto(userService.matchingUsers(id));
-    }
+  @GetMapping()
+  public List<UserPreviewDto> previewUsers(@RequestHeader(HttpHeaders.AUTHORIZATION) Long id) {
+    return userMapper.toDto(userService.matchingUsers(id));
+  }
 
-    @GetMapping("/{id}")
-    public UserPreviewDto getUserById(@PathVariable("id") Long id) {
-        return userMapper.toDto(userService.getUserById(id));
-    }
+  @GetMapping("/{id}")
+  public UserPreviewDto getUserById(@PathVariable("id") Long id) {
+    return userMapper.toDto(userService.getUserById(id));
+  }
 
-    @PostMapping()
-    public UserPreviewDto updateCurrentUser(@RequestHeader(HttpHeaders.AUTHORIZATION) Long userId,
-            @RequestBody UserUpdateRequestDto requestDto) {
-        return userMapper.toDto(
-                userService.updateUserById(
-                        userId,
-                        userMapper.toEntity(requestDto)));
-    }
-
+  @PatchMapping("/{id}")
+  public UserPreviewDto updateCurrentUser(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId,
+      // IGNORE THAT SHIT, THIS ONE FOR BROKE BITCHES
+      @PathVariable("id") Long __,
+      @RequestBody UserUpdateRequestDto requestDto) {
+    return userMapper.toDto(userService.updateUserById(userId, userMapper.toEntity(requestDto)));
+  }
 }
