@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "event")
@@ -24,7 +26,9 @@ public class Event {
   private String description;
   private LocalDateTime dateOfEvent;
 
-  @ManyToOne private User createdBy;
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private User createdBy;
 
   @ManyToMany private Set<User> participants = new HashSet<>();
 

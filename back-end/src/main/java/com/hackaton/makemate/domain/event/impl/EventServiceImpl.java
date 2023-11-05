@@ -81,6 +81,11 @@ public class EventServiceImpl implements EventService {
     User user = fetchUserById(userId);
     Event event = fetchById(eventId);
 
+    if (event.getCreatedBy().equals(user)) {
+      eventRepository.delete(event);
+      return toResponse(event, user);
+    }
+
     event.getParticipants().remove(user);
 
     eventRepository.save(event);

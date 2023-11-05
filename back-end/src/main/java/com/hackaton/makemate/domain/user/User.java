@@ -5,6 +5,8 @@ import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.interest.Interest;
 import jakarta.persistence.*;
 import java.util.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +28,7 @@ public class User {
       name = "users_interests",
       joinColumns = @JoinColumn(name = "user_id"),
       foreignKey = @ForeignKey(name = "user_interest_fk"))
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Interest> interests = new ArrayList<>();
 
   @ManyToMany()
@@ -33,6 +36,7 @@ public class User {
       name = "users_matches",
       joinColumns = @JoinColumn(name = "user_id"),
       foreignKey = @ForeignKey(name = "user_interest_fk"))
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<User> matches = new HashSet<>();
 
   private String description;
