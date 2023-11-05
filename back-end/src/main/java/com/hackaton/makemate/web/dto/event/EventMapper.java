@@ -1,5 +1,6 @@
 package com.hackaton.makemate.web.dto.event;
 
+import com.hackaton.makemate.domain.event.EvenType;
 import com.hackaton.makemate.domain.event.EventResponse;
 import com.hackaton.makemate.domain.user.User;
 import com.hackaton.makemate.web.dto.interest.InterestDto;
@@ -21,14 +22,15 @@ public class EventMapper {
   public SimplifiedEventDto toSimplifiedDto(EventResponse entity) {
     if (entity == null) return null;
 
-    Set<InterestDto> commonInterests = processInterests(entity);
+    Set<InterestDto> interests = null;
+    if (entity.event().getType().equals(EvenType.PRIVATE)) interests = processInterests(entity);
+    else interests = new HashSet<>(interestMapper.toDto(entity.event().getInterests()));
 
     return new SimplifiedEventDto(
         entity.event().getId(),
         entity.event().getName(),
         entity.event().getDateString(),
-        interestMapper.toDto(entity.event().getInterests()),
-        commonInterests,
+        interests,
         entity.matchesCount(),
         entity.accepted());
   }
@@ -42,11 +44,15 @@ public class EventMapper {
   public EventDto toDto(EventResponse entity) {
     if (entity == null) return null;
 
+    Set<InterestDto> interests = null;
+    if (entity.event().getType().equals(EvenType.PRIVATE)) interests = processInterests(entity);
+    else interests = new HashSet<>(interestMapper.toDto(entity.event().getInterests()));
+
     return new EventDto(
         entity.event().getId(),
         entity.event().getName(),
         entity.event().getDateString(),
-        interestMapper.toDto(entity.event().getInterests()),
+        interests,
         entity.event().getDescription(),
         entity.event().getPlace(),
         userMapper.toDto(entity.event().getCreatedBy()),
