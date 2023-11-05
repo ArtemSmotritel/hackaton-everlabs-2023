@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import AppInterestChip from "../../components/AppInterestChip.vue";
 import EventBoardApi from "../../api/eventBoard.api";
 
 import EventCard from "./EventCard.vue";
@@ -14,10 +15,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-container class="bg-surface-variant mb-6" style="height: 100vh">
-    <v-row align="center" justify="center" class="h-100">
-      <v-col align-self="center">
-        <EventCard v-for="event in generalEvents" :key="event.id" :event="event" />
+  <v-container>
+    <v-row>
+      <v-col
+        v-for="event in generalEvents"
+        :key="event.id"
+        cols="12"
+        md="6"
+        lg="4"
+      >
+        <EventCard :board-event="event" interestTitle="Looking for">
+          <template v-if="event.interests?.length > 0" v-slot:interests-title>
+            <strong>Looking for:</strong>
+          </template>
+          <template v-slot:interests>
+            <div
+              v-if="event.interests?.length > 0"
+              style="height: 80px; overflow-y: auto"
+            >
+              <AppInterestChip
+                v-for="(interest, index) in event.interests"
+                :key="index"
+                :text="interest.name"
+                style="margin-bottom: 0 !important; margin-right: 0 !important"
+              />
+            </div>
+          </template>
+        </EventCard>
       </v-col>
     </v-row>
   </v-container>
