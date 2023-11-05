@@ -15,8 +15,9 @@ const onSwipe = (direction) => {
   setTimeout(() => users.value.shift(), 50);
 };
 
-onMounted(() => {
-  users.value = UsersApi.getAll();
+onMounted(async () => {
+  users.value = (await UsersApi.getAll()).data;
+  console.log(users.value);
 });
 </script>
 
@@ -28,19 +29,26 @@ onMounted(() => {
       <v-col align-self="center" cols="12" lg="6" md="8" sm="10" xm="12">
         <div v-if="!users.length">
           <v-card class="mx-auto ma-4" max-width="80%">
-            <v-img src="https://cdn-icons-png.flaticon.com/512/5787/5787110.png" height="80%" cover></v-img>
+            <v-img
+              src="https://cdn-icons-png.flaticon.com/512/5787/5787110.png"
+              height="80%"
+              cover
+            ></v-img>
             <v-card-title class="text-center"
               >You do not have any new mates!
-              <router-link :to="{ name: 'event-board' }">Explore events...</router-link></v-card-title
+              <router-link :to="{ name: 'event-board' }"
+                >Explore events...</router-link
+              ></v-card-title
             >
           </v-card>
         </div>
-        <template v-else> </template>
-        <v-slide-y-transition v-for="(user, index) in users">
-          <Swipeable :key="user.id" v-on:swipe="onSwipe">
-            <TinderCard :key="user.id" :user="user" />
-          </Swipeable>
-        </v-slide-y-transition>
+        <template v-else>
+          <v-slide-y-transition v-for="(user, index) in users">
+            <Swipeable :key="user.id" v-on:swipe="onSwipe">
+              <TinderCard :key="user.id" :user="user" />
+            </Swipeable>
+          </v-slide-y-transition>
+        </template>
       </v-col>
     </v-row>
   </v-container>
