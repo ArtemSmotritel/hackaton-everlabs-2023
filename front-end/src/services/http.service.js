@@ -5,12 +5,12 @@ class HttpService {
 
   constructor() {
     this._axiosClient = axios.create({
-      baseURL: "localhost",
+      baseURL: "http://localhost:8080/api/",
       withCredentials: true,
     });
 
     this._axiosClient.interceptors.request.use(function (config) {
-      config.headers.Authorization = `Bearer 1234`;
+      config.headers.Authorization = +sessionStorage.getItem("userId") || 1;
       return config;
     });
   }

@@ -6,8 +6,8 @@ const inputValue = ref("");
 const router = useRouter();
 
 onMounted(() => {
-  if (localStorage.getItem("userId") !== null) {
-    inputValue.value = localStorage.getItem("userId");
+  if (sessionStorage.getItem("userId") !== null) {
+    inputValue.value = sessionStorage.getItem("userId");
   }
 });
 
@@ -20,7 +20,7 @@ function openBoard() {
 }
 
 function setSessionUserId() {
-  localStorage.setItem("userId", inputValue.value);
+  sessionStorage.setItem("userId", inputValue.value);
 }
 </script>
 
