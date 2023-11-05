@@ -2,17 +2,14 @@ package com.hackaton.makemate.web.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hackaton.makemate.web.dto.interest.InterestDto;
-import com.hackaton.makemate.web.dto.user.UserPreviewDto;
-import java.util.List;
+import java.util.Collection;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record EventDto(
+public record SimplifiedEventDto(
     Long id,
     String name,
     String date,
-    List<InterestDto> interests,
-    String description,
-    String place,
-    List<UserPreviewDto> participants,
-    Integer matchCount,
+    Collection<InterestDto> interests,
+    Collection<InterestDto> commonInterests,
+    Integer matchesCount,
     boolean accepted) {}

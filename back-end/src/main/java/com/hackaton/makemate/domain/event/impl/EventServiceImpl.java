@@ -4,12 +4,17 @@ import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.user.UserRepository;
 import com.hackaton.makemate.domain.event.EvenType;
 import com.hackaton.makemate.domain.event.Event;
+import com.hackaton.makemate.domain.event.EventResponse;
 import com.hackaton.makemate.domain.event.EventService;
 import com.hackaton.makemate.domain.exception.BadRequestException;
 import com.hackaton.makemate.domain.exception.ForbiddenException;
 import com.hackaton.makemate.domain.user.User;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EventServiceImpl implements EventService {
   private final EventRepository eventRepository;
   private final UserRepository userRepository;
@@ -20,7 +25,8 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Event getEventById(Long userId, Long eventId) {
+  public EventResponse getEventById(Long userId, Long eventId) {
+    User user = fetchUserById(userId);
     Event event = fetchById(eventId);
 
     if (event.getType() == EvenType.PRIVATE
@@ -29,24 +35,30 @@ public class EventServiceImpl implements EventService {
           "You can't fetch information about this event you little fraud ^^");
     }
 
-    return event;
+    return toResponse(event, user);
   }
 
   @Override
-  public List<Event> getAvailablePublicEvents(Long userId) {
-    return eventRepository.findAll().stream().filter(e -> e.getType() == EvenType.PUBLIC).toList();
+  public List<EventResponse> getAvailablePublicEvents(Long userId) {
+    User user = fetchUserById(userId);
+    List<Event> events =
+        eventRepository.findAll().stream().filter(e -> e.getType() == EvenType.PUBLIC).toList();
+
+    return events.stream().map(e -> this.toResponse(e, user)).toList();
   }
 
   @Override
-  public List<Event> getAvailablePrivateEvents(Long userId) {
+  public List<EventResponse> getAvailablePrivateEvents(Long userId) {
+    User user = fetchUserById(userId);
     return eventRepository.findAll().stream()
         .filter(e -> e.getType() == EvenType.PRIVATE)
         .filter(e -> e.getAllUsers().stream().anyMatch(u -> u.getId().equals(userId)))
+        .map(e -> toResponse(e, user))
         .toList();
   }
 
   @Override
-  public Event attendEventById(Long userId, Long eventId) {
+  public EventResponse attendEventById(Long userId, Long eventId) {
     User user = fetchUserById(userId);
     Event event = fetchById(eventId);
 
@@ -61,11 +73,11 @@ public class EventServiceImpl implements EventService {
 
     eventRepository.save(event);
 
-    return event;
+    return toResponse(event, user);
   }
 
   @Override
-  public Event skipEventById(Long userId, Long eventId) {
+  public EventResponse skipEventById(Long userId, Long eventId) {
     User user = fetchUserById(userId);
     Event event = fetchById(eventId);
 
@@ -73,7 +85,7 @@ public class EventServiceImpl implements EventService {
 
     eventRepository.save(event);
 
-    return event;
+    return toResponse(event, user);
   }
 
   private Event fetchById(Long eventId) {
@@ -89,5 +101,20 @@ public class EventServiceImpl implements EventService {
         .findById(userId)
         .orElseThrow(
             () -> new BadRequestException(String.format("User with id %s doesn't exist", userId)));
+  }
+
+  private EventResponse toResponse(Event event, User user) {
+    int matchCount = -1;
+    Set<User> participants = event.getParticipants();
+    if (participants == null || participants.isEmpty()) matchCount = 0;
+
+    Set<User> temp = new HashSet<>(participants);
+    temp.retainAll(user.getMatches());
+
+    matchCount = matchCount == 0 ? 0 : temp.size();
+
+    boolean accepted = participants.contains(user) || event.getCreatedBy().equals(user);
+
+    return new EventResponse(event, matchCount, accepted);
   }
 }

@@ -1,45 +1,54 @@
 package com.hackaton.makemate.web.controller.event;
 
 import com.google.common.net.HttpHeaders;
-import com.hackaton.makemate.database.event.EventRepository;
-import com.hackaton.makemate.domain.event.EvenType;
+import com.hackaton.makemate.domain.event.EventService;
 import com.hackaton.makemate.web.dto.event.EventDto;
 import com.hackaton.makemate.web.dto.event.EventMapper;
+import com.hackaton.makemate.web.dto.event.SimplifiedEventDto;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/events")
 @RestController
 public class EventsController {
-  private final EventRepository eventRepository;
+  private final EventService eventService;
   private final EventMapper eventMapper;
 
-  public EventsController(EventRepository eventRepository, EventMapper eventMapper) {
-    this.eventRepository = eventRepository;
+  public EventsController(EventService eventService, EventMapper eventMapper) {
+    this.eventService = eventService;
     this.eventMapper = eventMapper;
   }
 
-  @GetMapping("/general")
-  public List<EventDto> getPublicEvents() {
-    List<EventDto> events;
-    events =
-        eventRepository.findAll().stream()
-            .filter(e -> e.getType() == EvenType.PUBLIC)
-            .map(eventMapper::toDto)
-            .toList();
-    return events;
+  @GetMapping("/{eventId}")
+  public EventDto eventById(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId,
+      @PathVariable("eventId") Long eventId) {
+    return eventMapper.toDto(eventService.getEventById(userId, eventId));
+  }
+
+  @PostMapping("/{eventId}/attend")
+  public EventDto attendEventById(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId,
+      @PathVariable("eventId") Long eventId) {
+    return eventMapper.toDto(eventService.attendEventById(userId, eventId));
+  }
+
+  @PostMapping("/{eventId}/skip")
+  public EventDto skipEventById(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId,
+      @PathVariable("eventId") Long eventId) {
+    return eventMapper.toDto(eventService.skipEventById(userId, eventId));
+  }
+
+  @GetMapping("/public")
+  public List<SimplifiedEventDto> publicEvents(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId) {
+    return eventMapper.toSimplifiedDto(eventService.getAvailablePublicEvents(userId));
   }
 
   @GetMapping("/private")
-  public List<EventDto> getPrivateEvents(@RequestHeader(HttpHeaders.AUTHORIZATION) Long id) {
-    List<EventDto> events =
-        eventRepository.findAll().stream()
-            .filter(e -> e.getType() == EvenType.PRIVATE && e.getCreatedBy().getId() == id)
-            .map(eventMapper::toDto)
-            .toList();
-    return events;
+  public List<SimplifiedEventDto> privateEvents(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) Long userId) {
+    return eventMapper.toSimplifiedDto(eventService.getAvailablePrivateEvents(userId));
   }
 }

@@ -1,6 +1,7 @@
 package com.hackaton.makemate.domain.event;
 
 import com.google.common.base.Objects;
+import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class Event {
 
   @ManyToMany private Set<User> participants = new HashSet<>();
 
-  private Boolean active;
+  @ManyToMany private Set<Interest> interests = new HashSet<>();
 
   private String place;
 
@@ -37,14 +38,12 @@ public class Event {
       String description,
       LocalDateTime dateOfEvent,
       User createdBy,
-      boolean active,
       EvenType type) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.dateOfEvent = dateOfEvent;
     this.createdBy = createdBy;
-    this.active = active;
     this.type = type;
   }
 
@@ -68,6 +67,14 @@ public class Event {
 
   public void setType(EvenType eventType) {
     this.type = eventType;
+  }
+
+  public Set<Interest> getInterests() {
+    return interests;
+  }
+
+  public void setInterests(Set<Interest> interests) {
+    this.interests = interests;
   }
 
   public Long getId() {
@@ -110,14 +117,6 @@ public class Event {
     this.createdBy = createdBy;
   }
 
-  public Boolean getActive() {
-    return active;
-  }
-
-  public void setActive(Boolean active) {
-    this.active = active;
-  }
-
   public String getPlace() {
     return place;
   }
@@ -134,15 +133,6 @@ public class Event {
     this.participants = participants;
   }
 
-  public Integer getCurrentMatchCount() {
-    if (participants == null || participants.isEmpty()) return 0;
-
-    Set<User> temp = new HashSet<>(participants);
-    temp.retainAll(createdBy.getMatches());
-
-    return temp.size();
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -155,13 +145,12 @@ public class Event {
         && Objects.equal(dateOfEvent, event.dateOfEvent)
         && Objects.equal(createdBy, event.createdBy)
         && Objects.equal(participants, event.participants)
-        && Objects.equal(active, event.active)
         && Objects.equal(place, event.place);
   }
 
   @Override
   public int hashCode() {
     return Objects.hashCode(
-        id, type, name, description, dateOfEvent, createdBy, participants, active, place);
+        id, type, name, description, dateOfEvent, createdBy, participants, place);
   }
 }

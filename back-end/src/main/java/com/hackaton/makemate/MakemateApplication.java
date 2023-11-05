@@ -63,7 +63,6 @@ public class MakemateApplication {
               faker.name().lastName(),
               randomDateTimeBetween(past, future),
               null,
-              true,
               EvenType.PUBLIC);
 
       eventRepository.save(event);
