@@ -1,12 +1,10 @@
 <script setup>
-import AppInterestChip from "../../components/AppInterestChip.vue";
-import { useRouter } from "vue-router";
+import EventApi from "../../api/event.api";
 
 const { boardEvent } = defineProps({
   boardEvent: Object,
   interestTitle: String,
 });
-const router = useRouter();
 
 function getMatchesCountTooltipText(matchesCount) {
   switch (matchesCount) {
@@ -17,17 +15,24 @@ function getMatchesCountTooltipText(matchesCount) {
   }
 }
 
-function openEventDetails() {
-  console.log(boardEvent.id);
-  // router.push(`/events/${boardEvent.id}`);
-}
-
 function attendEvent() {
-  console.log(boardEvent.id);
+  new Promise(EventApi.attendEvent(boardEvent.id)).then(() => {
+    // Like an imbecile I am
+    boardEvent.value = {
+      ...boardEvent.value,
+      accepted: true,
+    };
+  });
 }
 
 function skipEvent() {
-  console.log(boardEvent.id);
+  new Promise(EventApi.skipEvent(boardEvent.id)).then(() => {
+    // Like an imbecile I am
+    boardEvent.value = {
+      ...boardEvent.value,
+      accepted: false,
+    };
+  });
 }
 </script>
 

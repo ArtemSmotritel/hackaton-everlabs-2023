@@ -15,17 +15,25 @@ function goToEvents() {
 }
 
 function attendEvent() {
-  const eventId = eventData.id;
-  EventApi.attendEvent(eventId);
+  EventApi.attendEvent(+route.params.eventId);
+  // Like an imbecile I am
+  eventData.value = {
+    ...eventData.value,
+    accepted: true,
+  };
 }
 
 function skipEvent() {
-  const eventId = eventData.id;
-  EventApi.skipEvent(eventId);
+  EventApi.skipEvent(+route.params.eventId);
+  // Like an imbecile I am
+  eventData.value = {
+    ...eventData.value,
+    accepted: false,
+  };
 }
 
-onMounted(() => {
-  eventData.value = EventApi.getOne(+route.params.eventId);
+onMounted(async () => {
+  eventData.value = (await EventApi.getOne(+route.params.eventId)).data;
 });
 </script>
 
