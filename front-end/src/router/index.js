@@ -4,11 +4,11 @@ import HomeView from "../views/home/HomeView.vue";
 import TinderView from "../views/tinder/TinderView.vue";
 import EventBoardView from "../views/event_board/EventBoardView.vue";
 import EditProfile from "../views/edit_profile/EditProfile.vue"
-//HomeView
+
 const componentRoutes = [
   {
     path: "/",
-    component: EditProfile,
+    component: HomeView,
     name: "home",
   },
   {
