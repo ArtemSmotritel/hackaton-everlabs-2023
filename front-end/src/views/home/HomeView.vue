@@ -1,25 +1,29 @@
-<script>
-export default {
-  data() {
-    return {
-      inputValue: "",
-    };
-  },
-  
-  methods: {
-    openTinder() {
-        this.$router.push('/tinder'); 
-    },
-    openBoard() {
-        this.$router.push('/board');
-    },
-    getInput() {
-        localStorage.setItem('userId', this.inputValue);
-      console.log( localStorage.getItem('userId'));
-      this.inputValue= "";
-    },
-  },
-};
+<script setup>
+import { ref, onMounted } from 'vue';
+import {  useRouter } from 'vue-router';
+
+    const inputValue = ref('');
+    const router = useRouter();
+    
+    onMounted(() => {
+      if (localStorage.getItem('userId') !== null) {
+        inputValue.value = localStorage.getItem('userId');
+      }})
+
+    function openTinder() {
+      router.push('/tinder');
+    }
+
+    function openBoard() {
+      router.push('/board');
+    }
+
+    function getInput() {
+      localStorage.setItem('userId', inputValue.value);
+
+    }
+
+
 </script>
 
 <template>
@@ -66,16 +70,15 @@ export default {
 
 <style scoped>
 .home-button {
-  position: relative;
-  background-image: url(./tinder.jpg);
+  
   background-size: cover;
   box-sizing: border-box;
 }
 .tinder-bac-img {
-  background-image: url(./tinder.jpg);
+  background-image: url('@/assets/tinder.jpg');
 }
 .board-bac-img {
-  background-image: url(./board.jpg);
+  background-image: url('@/assets/board.jpg');
 }
 
 .text-on-button {
