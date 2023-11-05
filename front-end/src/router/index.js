@@ -14,6 +14,11 @@ const componentRoutes = [
     component: TinderView,
     name: "match",
   },
+  {
+    path: "/events",
+    component: {},
+    name: "events",
+  },
 ];
 
 const redirectRoutes = [{ path: "/home", redirect: { name: "home" } }];

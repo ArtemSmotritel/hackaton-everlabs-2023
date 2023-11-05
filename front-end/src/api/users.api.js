@@ -4,6 +4,12 @@ class UsersApi {
   getAll() {
     const randomUsers = Array(8).fill(null);
     return randomUsers.map(generateRandomUser);
+    // return HttpService.get("users");
+  }
+
+  markMate(id) {
+    const body = { matchId: id };
+    return HttpService.post("matches", body);
   }
 }
 
@@ -32,7 +38,7 @@ function generateRandomUser() {
     age: randomAge,
     description: randomDescription,
     interests: randomInterests,
-    avatar_url: randomAvatarUrl,
+    // avatar_url: randomAvatarUrl,
   };
 
   return randomUser;
