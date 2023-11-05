@@ -10,6 +10,7 @@ import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.event.scheduler.EventScheduler;
 import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
+import com.hackaton.makemate.domain.user.UserFetcher;
 import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class MakemateApplication {
   @Autowired private InterestRepository interestRepository;
   @Autowired private EventRepository eventRepository;
   @Autowired private EventScheduler eventScheduler;
+  @Autowired private UserFetcher userFetcher;
 
   public static void main(String[] args) {
     SpringApplication.run(MakemateApplication.class, args);
@@ -43,6 +45,7 @@ public class MakemateApplication {
       performUserMigration();
       performEventMigration();
 
+      userFetcher.fetchUsersAsync(System.out::println);
       eventScheduler.init();
     };
   }
