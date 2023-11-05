@@ -16,7 +16,7 @@ const componentRoutes = [
     name: "match",
   },
   {
-    path: "/board",
+    path: "/events",
     component: EventBoardView,
     name: "event-board",
   },

@@ -16,7 +16,7 @@ function openTinder() {
 }
 
 function openBoard() {
-  router.push("/board");
+  router.push("/events");
 }
 
 function setSessionUserId() {
