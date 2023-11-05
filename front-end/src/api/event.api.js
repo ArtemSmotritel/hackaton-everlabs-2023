@@ -1,6 +1,59 @@
 import HttpService from "../services/http.service.js";
 
-class EventBoardApi {
+class EventApi {
+  getOne(eventId) {    
+    return {
+      id: "1",
+      name: "Pab",
+      date: "23.03 12:00",
+      interests: [
+        {
+          id: "12",
+          name: "lol",
+        },
+        {
+          id: "11",
+          name: "kek",
+        },
+        {
+          id: "13",
+          name: "chebyrec",
+        },
+      ],
+      description:
+        "fdsgdfgdsgfsdgdfgfdgsgsdfgfdsgdrgfdsfdsfadshfhasihdfiusahdfhidsahfijhdsafihsufheyrhfisbhbghbabrhbgffsbrfghbrshfgbhrsabfghsabfgihsabirbfgaisrbgfiorsbfgboasirbgfhirasbgfoiaborsgfdsgssdstdgfdgsrsgfgsdfgsdrsfdsffg",
+      place: "hfgdgfsd",
+      participants: [
+        {
+          id: "32",
+          firstName: "jon",
+          lastName: "leon",
+          interests: [{ id: "12", name: "dorov" }],
+        },
+        {
+          id: "43",
+          firstName: "zeka",
+          lastName: "okyn",
+          interests: [{ id: "12", name: "" }],
+        },
+        {
+          id: "76",
+          firstName: "leha",
+          lastName: "takuy",
+          interests: [{ id: "34", name: "dsfg" }],
+        },
+      ],
+    };
+  }
+
+  attendEvent(eventId) {
+
+  }
+
+  skipEvent(eventId) {
+    
+  }
+
   getAllGeneral() {
     const randomBoardEvents = Array(8).fill(null);
     return randomBoardEvents
@@ -77,4 +130,4 @@ function generateRandomBoardEvents() {
   return randomBoardEvent;
 }
 
-export default new EventBoardApi();
+export default new EventApi();

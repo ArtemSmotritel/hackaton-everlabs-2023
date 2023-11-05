@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import AppInterestChip from "../../components/AppInterestChip.vue";
-import EventBoardApi from "../../api/eventBoard.api";
+import EventApi from "../../api/event.api";
 import EventCard from "./EventCard.vue";
 import AppNavbar from "../../components/AppNavbar.vue";
 
@@ -10,8 +10,8 @@ const privateEvents = ref([]);
 const tab = ref(null);
 
 onMounted(() => {
-  generalEvents.value = EventBoardApi.getAllGeneral();
-  privateEvents.value = EventBoardApi.getAllPrivate();
+  generalEvents.value = EventApi.getAllGeneral();
+  privateEvents.value = EventApi.getAllPrivate();
 });
 </script>
 
