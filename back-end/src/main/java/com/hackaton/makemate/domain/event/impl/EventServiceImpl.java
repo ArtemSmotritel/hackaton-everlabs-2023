@@ -1,5 +1,6 @@
 package com.hackaton.makemate.domain.event.impl;
 
+import com.github.javafaker.Faker;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.user.UserRepository;
 import com.hackaton.makemate.domain.event.EvenType;
@@ -11,10 +12,9 @@ import com.hackaton.makemate.domain.exception.ForbiddenException;
 import com.hackaton.makemate.domain.user.User;
 import com.hackaton.makemate.domain.user.UserMatcher;
 import java.security.SecureRandom;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -92,36 +92,48 @@ public class EventServiceImpl implements EventService {
     User user = fetchUserById(userId);
     Event event = fetchById(eventId);
 
-    if (event.getCreatedBy().equals(user)) {
-      eventRepository.delete(event);
-      return toResponse(event, user);
-    }
-
     event.getParticipants().remove(user);
-
     eventRepository.save(event);
 
     return toResponse(event, user);
   }
 
   @Override
-  public EventResponse createRandomPrivateEvent() {
-    long totalCount = userRepository.count();
+  public List<Event> createPairedEvents() {
+    final Faker faker = new Faker();
+    final Set<Pair<User, User>> pairs = new HashSet<>();
+    final List<User> users = userRepository.findAll();
+    final List<Event> createdEvents = new ArrayList<>();
 
-    if (totalCount < 2) {
-      logger.warn("Now enough users to create private event");
-      return null;
+    for (int i = 0; i < users.size(); i++) {
+      for (int j = i + 1; j < users.size(); j++) {
+        User u1 = users.get(i);
+        User u2 = users.get(j);
+
+        if (u1.getMatches().contains(u2) && u2.getMatches().contains(u1)) {
+          pairs.add(Pair.of(u1, u2));
+        }
+      }
     }
 
-    User sender = fetchUserById(1 + random.nextLong(totalCount));
+    for (var pair : pairs) {
+      Event event =
+          new Event(
+              null,
+              String.format(
+                  "Generated %s for %s and %s",
+                  faker.witcher().location(), pair.getLeft(), pair.getRight()),
+              faker.witcher().quote(),
+              LocalDateTime.now(),
+              faker.witcher().location(),
+              null,
+              EvenType.PRIVATE);
 
-    int participantsSize = 1 + random.nextInt((int) Math.min(10, totalCount - 2));
+      eventRepository.save(event);
+      createdEvents.add(event);
+    }
 
-    List<User> matchingUsers = userMatcher.matchAlgorithm(sender, userRepository.findAll());
-
-    for (int i = 0; i < participantsSize; i++) {}
-
-    return null;
+    return createdEvents;
   }
 
   private Event fetchById(Long eventId) {

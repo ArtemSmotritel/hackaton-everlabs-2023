@@ -13,5 +13,5 @@ public interface EventService {
 
   EventResponse skipEventById(Long userId, Long eventId);
 
-  EventResponse createRandomPrivateEvent();
+  List<Event> createPairedEvents();
 }
