@@ -14,6 +14,8 @@ public class UserMatcher {
   // Ration between importance of Interests:Age in calculation
   private static final int INTERESTS_WEIGHT = 10;
 
+  private static final int SWIPE_WEIGHT = 1_000;
+
   private static final double AGE_WEIGHT = 1.0;
 
   public List<User> matchAlgorithm(User sender, List<User> targets) {
@@ -42,6 +44,9 @@ public class UserMatcher {
 
   private double calculateMatchScore(User sender, User target) {
     double score = 0.0;
+    if (target.getMatches().contains(sender)) {
+        score += SWIPE_WEIGHT;
+    }
 
     List<Interest> commonInterests =
         sender.getInterests().stream().filter(target.getInterests()::contains).toList();

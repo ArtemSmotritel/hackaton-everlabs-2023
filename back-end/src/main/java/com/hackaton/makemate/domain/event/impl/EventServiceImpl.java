@@ -1,6 +1,7 @@
 package com.hackaton.makemate.domain.event.impl;
 
 import com.github.javafaker.Faker;
+import com.google.common.collect.Sets;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.user.UserRepository;
 import com.hackaton.makemate.domain.event.EvenType;
@@ -138,7 +139,7 @@ public class EventServiceImpl implements EventService {
               faker.witcher().location(),
               null,
               EvenType.PRIVATE);
-
+      event.setParticipants(Sets.newHashSet(pair.getLeft(), pair.getRight()));
       eventRepository.save(event);
       createdEvents.add(event);
     }
