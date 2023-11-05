@@ -5,14 +5,17 @@ import com.google.common.collect.Lists;
 import com.hackaton.makemate.database.event.EventRepository;
 import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.database.user.UserRepository;
+import com.hackaton.makemate.domain.event.EvenType;
 import com.hackaton.makemate.domain.event.Event;
+import com.hackaton.makemate.domain.event.scheduler.EventScheduler;
 import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,46 +26,59 @@ import org.springframework.context.annotation.Bean;
 public class MakemateApplication {
 
   @Autowired private UserRepository userRepository;
-
   @Autowired private InterestRepository interestRepository;
   @Autowired private EventRepository eventRepository;
+  @Autowired private EventScheduler eventScheduler;
 
   public static void main(String[] args) {
     SpringApplication.run(MakemateApplication.class, args);
   }
 
   @Bean
+  @Transactional
   public CommandLineRunner commandLineRunner() {
     return (__) -> {
       // TODO: create real migration with flyway if possible
       performInterestMigration();
       performUserMigration();
-      userRepository.flush();
       performEventMigration();
+
+      eventScheduler.init();
     };
   }
 
-  @Transactional
   public void performEventMigration() {
+    List<User> users = userRepository.findAll();
+    List<Interest> interests = interestRepository.findAll();
+
     Faker faker = new Faker();
 
-    List<Event> interests = eventRepository.findAll();
     Collections.shuffle(interests);
 
-    for (int i = 0; i < 20; i++) {
+    long thirtyMinutesInMillis = TimeUnit.MINUTES.toMillis(30);
+
+    long past = System.currentTimeMillis() - thirtyMinutesInMillis;
+    long future = System.currentTimeMillis() + thirtyMinutesInMillis;
+    for (int i = 0; i < 25; i++) {
       Event event =
           new Event(
               null,
-              faker.name().firstName(),
-              faker.name().lastName(),
-              faker.date().birthday(),
-              false);
+              faker.witcher().quote(),
+              faker.lorem().sentence(),
+              randomDateTimeBetween(past, future),
+              faker.witcher().location(),
+              users.get(i % users.size()),
+              i % 5 == 0 ? EvenType.PRIVATE : EvenType.PUBLIC);
+
+      event.getParticipants().add(users.get(users.size() % (i + 1)));
+      event.getParticipants().add(users.get(users.size() % (i + 1)));
+
+      event.setInterests(new HashSet<>(randomSubArray(interests)));
 
       eventRepository.save(event);
     }
   }
 
-  @Transactional
   public void performUserMigration() {
     Faker faker = new Faker();
     final int userCount = 80;
@@ -94,7 +110,6 @@ public class MakemateApplication {
     }
   }
 
-  @Transactional
   public void performInterestMigration() {
     // Yes I ENJOY SHIT CODING
     interestRepository.save(new Interest(null, "Sport"));
@@ -139,5 +154,10 @@ public class MakemateApplication {
 
     int size = 1 + new Random().nextInt(Math.min(8, interests.size()));
     return new ArrayList<>(interests.subList(0, size));
+  }
+
+  public static LocalDateTime randomDateTimeBetween(long startMillis, long endMillis) {
+    long randomMillis = startMillis + new Random().nextLong(endMillis);
+    return LocalDateTime.ofInstant(Instant.ofEpochMilli(randomMillis), ZoneId.systemDefault());
   }
 }

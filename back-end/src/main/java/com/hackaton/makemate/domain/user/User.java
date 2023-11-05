@@ -5,6 +5,8 @@ import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.interest.Interest;
 import jakarta.persistence.*;
 import java.util.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "users")
@@ -21,18 +23,20 @@ public class User {
   @Column(name = "lastname", nullable = false, length = 64)
   private String lastName;
 
-  @ManyToMany()
+  @ManyToMany(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "users_interests",
       joinColumns = @JoinColumn(name = "user_id"),
       foreignKey = @ForeignKey(name = "user_interest_fk"))
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Interest> interests = new ArrayList<>();
 
-  @ManyToMany()
+  @ManyToMany(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "users_matches",
       joinColumns = @JoinColumn(name = "user_id"),
       foreignKey = @ForeignKey(name = "user_interest_fk"))
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<User> matches = new HashSet<>();
 
   private String description;
@@ -77,6 +81,12 @@ public class User {
 
   public Set<User> getMatches() {
     return matches;
+  }
+
+  public Set<User> getAllUsersView() {
+    Set<User> temp = new HashSet<>(getMatches());
+    temp.add(this);
+    return temp;
   }
 
   public void setMatches(Set<User> matches) {

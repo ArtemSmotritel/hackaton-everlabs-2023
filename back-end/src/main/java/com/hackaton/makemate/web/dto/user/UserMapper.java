@@ -2,7 +2,9 @@ package com.hackaton.makemate.web.dto.user;
 
 import com.hackaton.makemate.domain.user.User;
 import com.hackaton.makemate.domain.user.model.UserMatchRequest;
+import com.hackaton.makemate.domain.user.model.UserUpdateRequest;
 import com.hackaton.makemate.web.dto.interest.InterestMapper;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +35,11 @@ public class UserMapper {
     return new UserMatchRequest(dto.userId(), dto.matchId());
   }
 
-  public List<UserPreviewDto> toDto(List<User> entities) {
+  public List<UserPreviewDto> toDto(Collection<User> entities) {
     return entities.stream().map(this::toDto).toList();
+  }
+
+  public UserUpdateRequest toEntity(UserUpdateRequestDto dto) {
+    return new UserUpdateRequest(dto.firstName(), dto.lastName(), dto.interests());
   }
 }
