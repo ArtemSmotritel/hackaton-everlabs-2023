@@ -64,7 +64,7 @@ const chipsRules = [(v) => v.length > 0 || "Select at least one option"];
 <style scoped>
 .main-edit-profile-block {
   max-width: 400px;
-  margin: 50% 10px;
+  margin: 50% auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
