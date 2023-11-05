@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import AppInterestChip from "../../components/AppInterestChip.vue";
 import EventBoardApi from "../../api/eventBoard.api";
 import EventCard from "./EventCard.vue";
+import AppNavbar from "../../components/AppNavbar.vue";
 
 const generalEvents = ref([]);
 const privateEvents = ref([]);
@@ -15,6 +16,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <AppNavbar />
+
   <v-container>
     <v-tabs v-model="tab" class="mx-6 my-2">
       <v-tab value="general" bg-color="red">General</v-tab>

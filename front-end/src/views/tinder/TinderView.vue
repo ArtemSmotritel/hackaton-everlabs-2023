@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import UsersApi from "../../api/users.api";
 import TinderCard from "./TinderCard.vue";
 import Swipeable from "./Swipeable.vue";
+import AppNavbar from "../../components/AppNavbar.vue";
 
 const users = ref([]);
 
@@ -20,6 +21,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <AppNavbar />
+
   <v-container class="mb-6 overflow-hidden" style="height: 100vh">
     <v-row align="center" justify="center" class="h-100">
       <v-col align-self="center" cols="12" lg="6" md="8" sm="10" xm="12">
