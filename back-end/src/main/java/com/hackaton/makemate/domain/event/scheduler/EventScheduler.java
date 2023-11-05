@@ -30,9 +30,9 @@ public class EventScheduler {
         () -> {
           try {
             List<Event> pairedEvents = eventService.createPairedEvents();
-            logger.info("Order created {}: \n{}", LocalDateTime.now(), pairedEvents);
+            logger.info("Private group processed {}: \n{}", LocalDateTime.now(), pairedEvents);
           } catch (Exception e) {
-            logger.warn("Exception {} thrown while triyng to create pairs", e.getMessage());
+            logger.warn("Exception {} thrown while trying to create pairs", e.toString());
           }
         },
         15_000,
