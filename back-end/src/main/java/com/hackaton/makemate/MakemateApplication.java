@@ -59,7 +59,7 @@ public class MakemateApplication {
 
     long past = System.currentTimeMillis() - thirtyMinutesInMillis;
     long future = System.currentTimeMillis() + thirtyMinutesInMillis;
-    for (int i = 0; i < 25; i++) {
+    for (int i = 0; i < 10; i++) {
       Event event =
           new Event(
               null,
@@ -81,11 +81,11 @@ public class MakemateApplication {
 
   public void performUserMigration() {
     Faker faker = new Faker();
-    final int userCount = 80;
+    final int userCount = 10;
 
     List<Interest> interests = interestRepository.findAll();
 
-    for (int i = 0; i < 80; i++) {
+    for (int i = 0; i < 10; i++) {
       final String description =
           String.format(
               "In the age-old lands of Middle-earth, %s is found wandering the paths of %s. "

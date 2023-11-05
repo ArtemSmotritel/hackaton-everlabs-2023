@@ -57,7 +57,9 @@ public class Event {
 
   public Set<User> getAllUsers() {
     Set<User> part = new HashSet<>(participants);
-    part.add(createdBy);
+    if (createdBy != null) {
+      part.add(createdBy);
+    }
     return part;
   }
 
