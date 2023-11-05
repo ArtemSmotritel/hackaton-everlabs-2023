@@ -68,9 +68,9 @@ function generateRandomBoardEvents() {
     name: randomName,
     date: randomDate,
     matchesCount: randomMatchCount,
-    commonInterests: randomInterests,
+    interests: randomInterests,
     createdBy: randomCreatedById,
-    isAccepted: isAccepted,
+    accepted: isAccepted,
     type: null,
   };
 
