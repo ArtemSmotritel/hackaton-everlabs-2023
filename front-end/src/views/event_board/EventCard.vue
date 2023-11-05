@@ -1,57 +1,77 @@
 <script setup>
 import AppInterestChip from "../../components/AppInterestChip.vue";
+import { useRouter } from "vue-router";
 
-defineProps({ event: Object });
+const { boardEvent } = defineProps({
+  boardEvent: Object,
+  interestTitle: String,
+});
+const router = useRouter();
 
 function getMatchesCountTooltipText(matchesCount) {
   switch (matchesCount) {
     case 1:
-      return "There is one person with some similar interests";
+      return "One matched co-worker wants to attend this";
     default:
-      return `There are ${matchesCount} people with some similar interests`;
+      return `${matchesCount} matched co-workers want to attend this`;
   }
+}
+
+function openEventDetails() {
+  console.log(boardEvent.id);
+  // router.push(`/events/${boardEvent.id}`);
+}
+
+function attendEvent() {
+  console.log(boardEvent.id);
+}
+
+function skipEvent() {
+  console.log(boardEvent.id);
 }
 </script>
 
 <template>
-  <v-card class="mx-auto" max-width="344" variant="elevated" color="primary">
+  <v-card class="mx-auto" max-width="344" variant="elevated">
     <v-card-title>
-      <div class="text-overline mb-1">
-        Matches Count: {{ event.matchesCount }}
-        <v-tooltip :text="getMatchesCountTooltipText(event.matchesCount ?? 0)">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              icon="mdi-information"
-              size="x-small"
-              v-bind="props"
-            ></v-icon>
-          </template>
-        </v-tooltip>
+      <div class="text-overline mb-1 d-flex justify-space-between">
+        <span>
+          Attendants: {{ boardEvent.matchesCount }}
+          <v-tooltip
+            location="bottom"
+            :text="getMatchesCountTooltipText(boardEvent.matchesCount ?? 0)"
+          >
+            <template v-slot:activator="{ props }">
+              <v-icon
+                icon="mdi-information"
+                size="x-small"
+                v-bind="props"
+              ></v-icon>
+            </template>
+          </v-tooltip>
+        </span>
+        <span v-if="boardEvent.accepted" class="text-success"
+          >including you</span
+        >
       </div>
-      {{ event.name }}
+      {{ boardEvent.name }}
     </v-card-title>
     <v-card-subtitle>
-      {{ event.date }}
+      {{ boardEvent.date }}
     </v-card-subtitle>
     <v-card-text>
-      <ul>
-        <strong>Common Interests:</strong>
-        <div>
-          <AppInterestChip
-            v-for="(interest, index) in event.commonInterests"
-            :key="index"
-            :text="interest.name"
-            style="margin-bottom: 0 !important; margin-right: 0 !important;"
-          />
+      <slot name="interests-title"></slot>
+      <slot name="interests">
+        <div class="font-weight-bold" style="height: 100px">
+          No common interests &#129402; &#x1F97A;
         </div>
-        <!-- <v-sheet class="overflow-auto" rounded>
-          
-        </v-sheet> -->
-      </ul>
+      </slot>
     </v-card-text>
     <v-card-actions>
-      <v-btn> Attend </v-btn>
-      <v-btn> Open </v-btn>
+      <v-btn color="success" v-if="!boardEvent.accepted" @click="attendEvent">
+        Attend
+      </v-btn>
+      <v-btn @click="openEventDetails"> Open </v-btn>
     </v-card-actions>
   </v-card>
 </template>
