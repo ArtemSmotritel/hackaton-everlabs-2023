@@ -54,7 +54,7 @@ onMounted(async () => {
           </svg>
         </button>
 
-        <span class="text-h3 text-titel-event-details">{{
+        <span class="text-h5 text-titel-event-details">{{
           eventData.name
         }}</span>
       </v-col>
