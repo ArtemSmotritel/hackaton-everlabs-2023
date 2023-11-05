@@ -71,7 +71,9 @@ function skipEvent() {
       <v-btn color="success" v-if="!boardEvent.accepted" @click="attendEvent">
         Attend
       </v-btn>
-      <v-btn @click="openEventDetails"> Open </v-btn>
+      <router-link :to="'/events/' + boardEvent.id">
+        <v-btn> Open </v-btn>
+      </router-link>
     </v-card-actions>
   </v-card>
 </template>
