@@ -28,7 +28,7 @@ onMounted(() => {
             <v-img src="https://cdn-icons-png.flaticon.com/512/5787/5787110.png" height="80%" cover></v-img>
             <v-card-title class="text-center"
               >You do not have any new mates!
-              <router-link :to="{ name: 'events' }">Explore events...</router-link></v-card-title
+              <router-link :to="{ name: 'event-board' }">Explore events...</router-link></v-card-title
             >
           </v-card>
         </div>
