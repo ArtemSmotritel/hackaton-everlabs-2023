@@ -1,14 +1,20 @@
 package com.hackaton.makemate.domain.event.scheduler;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.hackaton.makemate.domain.event.Event;
 import com.hackaton.makemate.domain.event.EventService;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventScheduler {
+  private static final Logger logger = LoggerFactory.getLogger(EventScheduler.class);
   private final ScheduledExecutorService executorService;
   private final EventService eventService;
 
@@ -18,8 +24,13 @@ public class EventScheduler {
         Executors.newSingleThreadScheduledExecutor(
             new ThreadFactoryBuilder().setNameFormat("EventSchedulerThread-%s").build());
 
-    this.executorService.scheduleAtFixedRate(() -> {}, 100, 1000, TimeUnit.MICROSECONDS);
+    this.executorService.scheduleAtFixedRate(
+        () -> {
+          List<Event> pairedEvents = eventService.createPairedEvents();
+          logger.info("Order created {}: \n{}", LocalDateTime.now(), pairedEvents);
+        },
+        15_000,
+        10_000,
+        TimeUnit.MICROSECONDS);
   }
-
-  private void createPrivateEvents(int count) {}
 }
