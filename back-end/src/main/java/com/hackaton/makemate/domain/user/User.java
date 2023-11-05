@@ -83,6 +83,12 @@ public class User {
     return matches;
   }
 
+  public Set<User> getAllUsersView() {
+    Set<User> temp = new HashSet<>(getMatches());
+    temp.add(this);
+    return temp;
+  }
+
   public void setMatches(Set<User> matches) {
     this.matches = matches;
   }

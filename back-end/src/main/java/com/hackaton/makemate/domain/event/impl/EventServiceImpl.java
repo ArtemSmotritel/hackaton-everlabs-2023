@@ -9,19 +9,29 @@ import com.hackaton.makemate.domain.event.EventService;
 import com.hackaton.makemate.domain.exception.BadRequestException;
 import com.hackaton.makemate.domain.exception.ForbiddenException;
 import com.hackaton.makemate.domain.user.User;
+import com.hackaton.makemate.domain.user.UserMatcher;
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EventServiceImpl implements EventService {
   private final EventRepository eventRepository;
   private final UserRepository userRepository;
+  private final UserMatcher userMatcher;
+  private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
+  private final Random random = new SecureRandom();
 
-  public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository) {
+  public EventServiceImpl(
+      EventRepository eventRepository, UserRepository userRepository, UserMatcher userMatcher) {
     this.eventRepository = eventRepository;
     this.userRepository = userRepository;
+    this.userMatcher = userMatcher;
   }
 
   @Override
@@ -52,6 +62,7 @@ public class EventServiceImpl implements EventService {
     User user = fetchUserById(userId);
     return eventRepository.findAll().stream()
         .filter(e -> e.getType() == EvenType.PRIVATE)
+        // YES, YES I KNOW THAT, I WASTE MEMORY AND TIME, BUT IT'S BETTER THAT SHIT-ASS PREDICATE
         .filter(e -> e.getAllUsers().stream().anyMatch(u -> u.getId().equals(userId)))
         .map(e -> toResponse(e, user))
         .toList();
@@ -93,6 +104,26 @@ public class EventServiceImpl implements EventService {
     return toResponse(event, user);
   }
 
+  @Override
+  public EventResponse createRandomPrivateEvent() {
+    long totalCount = userRepository.count();
+
+    if (totalCount < 2) {
+      logger.warn("Now enough users to create private event");
+      return null;
+    }
+
+    User sender = fetchUserById(1 + random.nextLong(totalCount));
+
+    int participantsSize = 1 + random.nextInt((int) Math.min(10, totalCount - 2));
+
+    List<User> matchingUsers = userMatcher.matchAlgorithm(sender, userRepository.findAll());
+
+    for (int i = 0; i < participantsSize; i++) {}
+
+    return null;
+  }
+
   private Event fetchById(Long eventId) {
     return eventRepository
         .findById(eventId)
@@ -119,7 +150,7 @@ public class EventServiceImpl implements EventService {
       accepted = false;
     } else {
       Set<User> temp = new HashSet<>(participants);
-      temp.retainAll(user.getMatches());
+      temp.retainAll(user.getAllUsersView());
       matchCount = temp.size();
 
       accepted = participants.contains(user) || event.getCreatedBy().equals(user);
