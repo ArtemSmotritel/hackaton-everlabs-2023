@@ -23,14 +23,20 @@ public class EventScheduler {
     this.executorService =
         Executors.newSingleThreadScheduledExecutor(
             new ThreadFactoryBuilder().setNameFormat("EventSchedulerThread-%s").build());
+  }
 
+  public void init() {
     this.executorService.scheduleAtFixedRate(
         () -> {
-          List<Event> pairedEvents = eventService.createPairedEvents();
-          logger.info("Order created {}: \n{}", LocalDateTime.now(), pairedEvents);
+          try {
+            List<Event> pairedEvents = eventService.createPairedEvents();
+            logger.info("Order created {}: \n{}", LocalDateTime.now(), pairedEvents);
+          } catch (Exception e) {
+            logger.warn("Exception {} thrown while triyng to create pairs", e.getMessage());
+          }
         },
         15_000,
         10_000,
-        TimeUnit.MICROSECONDS);
+        TimeUnit.MILLISECONDS);
   }
 }

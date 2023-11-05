@@ -23,7 +23,7 @@ public class User {
   @Column(name = "lastname", nullable = false, length = 64)
   private String lastName;
 
-  @ManyToMany()
+  @ManyToMany(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "users_interests",
       joinColumns = @JoinColumn(name = "user_id"),
@@ -31,7 +31,7 @@ public class User {
   @OnDelete(action = OnDeleteAction.CASCADE)
   private List<Interest> interests = new ArrayList<>();
 
-  @ManyToMany()
+  @ManyToMany(fetch = FetchType.EAGER)
   @CollectionTable(
       name = "users_matches",
       joinColumns = @JoinColumn(name = "user_id"),

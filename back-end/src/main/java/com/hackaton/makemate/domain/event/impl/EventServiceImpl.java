@@ -26,6 +26,8 @@ public class EventServiceImpl implements EventService {
   private final UserMatcher userMatcher;
   private final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
   private final Random random = new SecureRandom();
+  // I KNOW THAT IT SHOULDN'T BE HERE, CHILL
+  private final Set<Pair<User, User>> pairs = new HashSet<>();
 
   public EventServiceImpl(
       EventRepository eventRepository, UserRepository userRepository, UserMatcher userMatcher) {
@@ -101,9 +103,9 @@ public class EventServiceImpl implements EventService {
   @Override
   public List<Event> createPairedEvents() {
     final Faker faker = new Faker();
-    final Set<Pair<User, User>> pairs = new HashSet<>();
     final List<User> users = userRepository.findAll();
     final List<Event> createdEvents = new ArrayList<>();
+    final Set<Pair<User, User>> newPairs = new HashSet<>();
 
     for (int i = 0; i < users.size(); i++) {
       for (int j = i + 1; j < users.size(); j++) {
@@ -111,18 +113,26 @@ public class EventServiceImpl implements EventService {
         User u2 = users.get(j);
 
         if (u1.getMatches().contains(u2) && u2.getMatches().contains(u1)) {
-          pairs.add(Pair.of(u1, u2));
+          newPairs.add(Pair.of(u1, u2));
         }
       }
     }
 
     for (var pair : pairs) {
+      // SHIT CODE EDITION BUT USERS STORED HERE CANT BE COMPARED
+      newPairs.removeIf(
+          p ->
+              p.getRight().getId().equals(pair.getRight().getId())
+                  && p.getLeft().getId().equals(pair.getLeft().getId()));
+    }
+
+    for (var pair : newPairs) {
       Event event =
           new Event(
               null,
               String.format(
                   "Generated %s for %s and %s",
-                  faker.witcher().location(), pair.getLeft(), pair.getRight()),
+                  faker.witcher().location(), pair.getLeft().getId(), pair.getRight().getId()),
               faker.witcher().quote(),
               LocalDateTime.now(),
               faker.witcher().location(),
@@ -132,6 +142,8 @@ public class EventServiceImpl implements EventService {
       eventRepository.save(event);
       createdEvents.add(event);
     }
+
+    pairs.addAll(newPairs);
 
     return createdEvents;
   }

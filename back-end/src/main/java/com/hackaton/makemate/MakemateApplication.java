@@ -7,6 +7,7 @@ import com.hackaton.makemate.database.interest.InterestRepository;
 import com.hackaton.makemate.database.user.UserRepository;
 import com.hackaton.makemate.domain.event.EvenType;
 import com.hackaton.makemate.domain.event.Event;
+import com.hackaton.makemate.domain.event.scheduler.EventScheduler;
 import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
 import jakarta.transaction.Transactional;
@@ -25,25 +26,27 @@ import org.springframework.context.annotation.Bean;
 public class MakemateApplication {
 
   @Autowired private UserRepository userRepository;
-
   @Autowired private InterestRepository interestRepository;
   @Autowired private EventRepository eventRepository;
+  @Autowired private EventScheduler eventScheduler;
 
   public static void main(String[] args) {
     SpringApplication.run(MakemateApplication.class, args);
   }
 
   @Bean
+  @Transactional
   public CommandLineRunner commandLineRunner() {
     return (__) -> {
       // TODO: create real migration with flyway if possible
       performInterestMigration();
       performUserMigration();
       performEventMigration();
+
+      eventScheduler.init();
     };
   }
 
-  @Transactional
   public void performEventMigration() {
     List<User> users = userRepository.findAll();
     List<Interest> interests = interestRepository.findAll();
@@ -76,7 +79,6 @@ public class MakemateApplication {
     }
   }
 
-  @Transactional
   public void performUserMigration() {
     Faker faker = new Faker();
     final int userCount = 80;
@@ -108,7 +110,6 @@ public class MakemateApplication {
     }
   }
 
-  @Transactional
   public void performInterestMigration() {
     // Yes I ENJOY SHIT CODING
     interestRepository.save(new Interest(null, "Sport"));
