@@ -1,6 +1,7 @@
 package com.hackaton.makemate.web.controller.exception;
 
 import com.hackaton.makemate.domain.exception.BadRequestException;
+import com.hackaton.makemate.domain.exception.ForbiddenException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,11 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(DEFAULT_KEY, e.getMessage()));
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  public ResponseEntity<Map<String, String>> handleForbiddenException(ForbiddenException e) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(DEFAULT_KEY, e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)

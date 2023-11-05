@@ -1,3 +1,15 @@
 package com.hackaton.makemate.domain.event;
 
-public interface EventService {}
+import java.util.List;
+
+public interface EventService {
+  EventResponse getEventById(Long userId, Long eventId);
+
+  List<EventResponse> getAvailablePublicEvents(Long userId);
+
+  List<EventResponse> getAvailablePrivateEvents(Long userId);
+
+  EventResponse attendEventById(Long userId, Long eventId);
+
+  EventResponse skipEventById(Long userId, Long eventId);
+}

@@ -1,10 +1,15 @@
 package com.hackaton.makemate.domain.event;
 
 import com.google.common.base.Objects;
+import com.hackaton.makemate.domain.interest.Interest;
 import com.hackaton.makemate.domain.user.User;
 import jakarta.persistence.*;
-import java.util.Date;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "event")
@@ -14,42 +19,69 @@ public class Event {
   @GeneratedValue
   private Long id;
 
-  public EventType getEventType() {
-    return eventType;
-  }
-
-  public void setEventType(EventType eventType) {
-    this.eventType = eventType;
-  }
-
   @Enumerated(EnumType.STRING)
-  private EventType eventType;
+  private EvenType type;
 
   private String name;
   private String description;
-
-  private Date dateOfEvent;
+  private LocalDateTime dateOfEvent;
 
   @ManyToOne
-  @JoinColumn(name = "create_by") // Define the foreign key column
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private User createdBy;
 
-  private Boolean isActive;
-  private String Place;
+  @ManyToMany private Set<User> participants = new HashSet<>();
 
-  public Event(Long id, String name, String description, Date dateOfEvent, boolean isActive) {
+  @ManyToMany private Set<Interest> interests = new HashSet<>();
+
+  private String place;
+
+  public Event(
+      Long id,
+      String name,
+      String description,
+      LocalDateTime dateOfEvent,
+      String place,
+      User createdBy,
+      EvenType type) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.dateOfEvent = dateOfEvent;
-    this.createdBy = null;
-    this.isActive = isActive;
-    Random random = new Random();
-
-    int randomIndex = random.nextInt(2);
-    this.eventType = randomIndex == 0 ? EventType.PUBLIC : EventType.PRIVATE;
+    this.createdBy = createdBy;
+    this.place = place;
+    this.type = type;
   }
 
   public Event() {}
+
+  public Set<User> getAllUsers() {
+    Set<User> part = new HashSet<>(participants);
+    part.add(createdBy);
+    return part;
+  }
+
+  public String getDateString() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM h a");
+
+    return dateOfEvent.format(formatter);
+  }
+
+  public EvenType getType() {
+    return type;
+  }
+
+  public void setType(EvenType eventType) {
+    this.type = eventType;
+  }
+
+  public Set<Interest> getInterests() {
+    return interests;
+  }
+
+  public void setInterests(Set<Interest> interests) {
+    this.interests = interests;
+  }
 
   public Long getId() {
     return id;
@@ -75,11 +107,11 @@ public class Event {
     this.description = description;
   }
 
-  public Date getDateOfEvent() {
+  public LocalDateTime getDateOfEvent() {
     return dateOfEvent;
   }
 
-  public void setDateOfEvent(Date dateOfEvent) {
+  public void setDateOfEvent(LocalDateTime dateOfEvent) {
     this.dateOfEvent = dateOfEvent;
   }
 
@@ -91,20 +123,20 @@ public class Event {
     this.createdBy = createdBy;
   }
 
-  public Boolean getActive() {
-    return isActive;
-  }
-
-  public void setActive(Boolean active) {
-    isActive = active;
-  }
-
   public String getPlace() {
-    return Place;
+    return place;
   }
 
   public void setPlace(String place) {
-    Place = place;
+    this.place = place;
+  }
+
+  public Set<User> getParticipants() {
+    return participants;
+  }
+
+  public void setParticipants(Set<User> participants) {
+    this.participants = participants;
   }
 
   @Override
@@ -113,16 +145,18 @@ public class Event {
     if (o == null || getClass() != o.getClass()) return false;
     Event event = (Event) o;
     return Objects.equal(id, event.id)
+        && type == event.type
         && Objects.equal(name, event.name)
         && Objects.equal(description, event.description)
         && Objects.equal(dateOfEvent, event.dateOfEvent)
         && Objects.equal(createdBy, event.createdBy)
-        && Objects.equal(isActive, event.isActive)
-        && Objects.equal(Place, event.Place);
+        && Objects.equal(participants, event.participants)
+        && Objects.equal(place, event.place);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(id, name, description, dateOfEvent, createdBy, isActive, Place);
+    return Objects.hashCode(
+        id, type, name, description, dateOfEvent, createdBy, participants, place);
   }
 }

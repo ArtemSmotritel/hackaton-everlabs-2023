@@ -1,6 +1,7 @@
 package com.hackaton.makemate.web.dto.interest;
 
 import com.hackaton.makemate.domain.interest.Interest;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ public class InterestMapper {
     return new InterestDto(entity.getId(), entity.getName());
   }
 
-  public List<InterestDto> toDto(List<Interest> entities) {
+  public List<InterestDto> toDto(Collection<Interest> entities) {
     return entities.stream().map(this::toDto).toList();
   }
 }
